@@ -67,7 +67,7 @@ def product_list_view(request):
         "price_max": price_max or 750,
         "sort_by": sort_by,
     }
-    return render(request, 'shop/product-list.html', context)
+    return render(request, 'shop/category-list.html', context)
 
 
 def product_detail_view(request, pk):
@@ -116,4 +116,4 @@ def product_detail_view(request, pk):
         "avg_rating": avg_rating,
         "review_count": review_count,
     }
-    return render(request, 'shop/product-detail.html', context)
+    return render(request, 'products/product.html', context)

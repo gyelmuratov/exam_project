@@ -1,0 +1,41 @@
+/* Simple header / navbar layout fixes */
+
+.header-middle .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-left .logo {
+    margin-right: 2rem;
+}
+
+.main-nav {
+    flex: 1;
+}
+
+.main-nav .menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.main-nav .menu > li {
+    margin-right: 0;
+}
+
+.main-nav .menu > li > a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.header-top .top-menu > li > a {
+    text-decoration: none;
+}
+

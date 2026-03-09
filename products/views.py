@@ -60,4 +60,4 @@ def product_detail_view(request, pk):
         "review_count": reviews.count(),
         "categories": product.categories.all(),
     }
-    return render(request, 'products/product-detail.html', context)
+    return render(request, 'products/product.html', context)
