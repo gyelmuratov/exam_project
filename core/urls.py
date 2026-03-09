@@ -14,10 +14,23 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('shared.urls', namespace='shared')),
     path('blogs/', include('blogs.urls', namespace='blogs')),
+    path('products/', include('products.urls', namespace='products')),
+    path('shop/', include('shop.urls', namespace='shop')),
+    path('users/', include('users.urls', namespace='users')),
 ]
+
+# Development: assets (JS, CSS, rasm) va media fayllarni serve qilish
+if settings.DEBUG:
+    urlpatterns += [
+        path('assets/<path:path>', serve, {'document_root': settings.BASE_DIR / 'assets'}),
+        path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+    ]

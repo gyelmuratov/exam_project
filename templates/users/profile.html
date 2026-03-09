@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Profil</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container py-5">
+    <h1>Profil: {{ user.username }}</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Tel: {{ user.phone|default:"—" }}</p>
+    <h2 class="mt-4">So'nggi buyurtmalar</h2>
+    {% for order in orders %}
+    <p><a href="{% url 'shop:order_success' order_id=order.id %}">Buyurtma #{{ order.id }}</a> — {{ order.total_amount }} so'm ({{ order.created_at }})</p>
+    {% empty %}
+    <p>Buyurtmalar yo'q.</p>
+    {% endfor %}
+    <p class="mt-4"><a href="{% url 'users:logout' %}">Chiqish</a> | <a href="{% url 'shared:index' %}">Bosh sahifa</a></p>
+</div>
+</body>
+</html>

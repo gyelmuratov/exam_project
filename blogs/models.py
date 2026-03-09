@@ -1,5 +1,4 @@
 from django.db import models
-
 from shared.models import BaseModel
 
 
@@ -11,6 +10,12 @@ class Author(BaseModel):
     about = models.CharField(
         max_length=255,
         verbose_name="About",
+    )
+    image = models.ImageField(
+        upload_to='authors/',
+        null=True,
+        blank=True,
+        verbose_name="Image",
     )
     is_active = models.BooleanField(
         default=True,
@@ -29,6 +34,7 @@ class Author(BaseModel):
 class Category(BaseModel):
     title = models.CharField(
         max_length=128,
+        verbose_name="Title",
     )
     parent = models.ForeignKey(
         'self',
@@ -36,22 +42,27 @@ class Category(BaseModel):
         related_name='children',
         null=True,
         blank=True,
-        verbose_name=("Parent category")
+        verbose_name="Parent category",
     )
 
     def __str__(self):
         return self.title
+
+    def get_blog_count(self):
+        return self.blogs.filter(status=BlogStatus.PUBLISHED).count()
 
     class Meta:
         db_table = 'categories'
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
+
 class Tag(BaseModel):
     title = models.CharField(
         max_length=128,
         verbose_name="Title",
     )
+
     def __str__(self):
         return self.title
 
@@ -60,10 +71,11 @@ class Tag(BaseModel):
         verbose_name = "Tag"
         verbose_name_plural = "Tags"
 
+
 class BlogStatus(models.TextChoices):
-    PUBLISHED = "PUBLISHED", ("Published")
-    DRAFT = "DRAFT", ("Draft")
-    DELETED = "DELETED", ("Deleted")
+    PUBLISHED = "PUBLISHED", "Published"
+    DRAFT = "DRAFT", "Draft"
+    DELETED = "DELETED", "Deleted"
 
 
 class Blog(BaseModel):
@@ -72,41 +84,47 @@ class Blog(BaseModel):
         verbose_name="Title",
     )
     short_description = models.CharField(
-        max_length=128,
+        max_length=255,
         verbose_name="Short Description",
+    )
+    long_description = models.TextField(
+        verbose_name="Long Description",
     )
     image = models.ImageField(
         upload_to='blogs/',
         null=True,
         blank=True,
-        verbose_name=("Image")
-    )
-    long_description = models.TextField(
-        verbose_name="Long Description",
+        verbose_name="Image",
     )
     status = models.CharField(
         max_length=20,
         choices=BlogStatus.choices,
         default=BlogStatus.DRAFT,
-        verbose_name=("Status")
+        verbose_name="Status",
+    )
+    view_count = models.PositiveIntegerField(
+        default=0,
+        verbose_name="View Count",
     )
     categories = models.ManyToManyField(
         Category,
         related_name='blogs',
-        verbose_name=("Categories")
+        verbose_name="Categories",
     )
     tags = models.ManyToManyField(
         Tag,
         related_name='blogs',
-        verbose_name=("Tags")
+        verbose_name="Tags",
     )
     authors = models.ManyToManyField(
         Author,
         related_name='blogs',
-        verbose_name=("Authors")
+        verbose_name="Authors",
     )
+
     def __str__(self):
         return self.title
+
     class Meta:
         db_table = 'blogs'
         verbose_name = 'Blog'

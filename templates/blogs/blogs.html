@@ -1,0 +1,501 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Blog - Molla Store</title>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
+    <link rel="shortcut icon" href="{% static 'images/icons/favicon.ico' %}">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/plugins/owl-carousel/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <div class="container">
+                    <div class="header-left">
+                        <div class="header-dropdown">
+                            <a href="#">Usd</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">Eur</a></li>
+                                    <li><a href="#">Usd</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="header-dropdown">
+                            <a href="#">Eng</a>
+                            <div class="header-menu">
+                                <ul>
+                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">French</a></li>
+                                    <li><a href="#">Spanish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <ul class="top-menu">
+                            <li>
+                                <a href="#">Links</a>
+                                <ul>
+                                    <li><a href="tel:#"><i class="icon-phone"></i>Call: +0123 456 789</a></li>
+                                    <li><a href="{% url 'shared:index' %}">Home</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                    {% if user.is_authenticated %}
+                                    <li><a href="{% url 'users:logout' %}"><i class="icon-user"></i>Logout</a></li>
+                                    {% else %}
+                                    <li><a href="#signin-modal" data-toggle="modal"><i class="icon-user"></i>Login</a></li>
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!-- End .header-top -->
+
+            <div class="header-middle sticky-header">
+                <div class="container">
+                    <div class="header-left">
+                        <button class="mobile-menu-toggler">
+                            <span class="sr-only">Toggle mobile menu</span>
+                            <i class="icon-bars"></i>
+                        </button>
+                        <a href="{% url 'shared:index' %}" class="logo">
+                            <img src="{% static 'images/logo.png' %}" alt="Molla Logo" width="105" height="25">
+                        </a>
+                        <nav class="main-nav">
+                            <ul class="menu sf-arrows">
+                                <li><a href="{% url 'shared:index' %}">Home</a></li>
+                                <li><a href="{% url 'shop:list' %}">Shop</a></li>
+                                <li><a href="{% url 'products:list' %}">Products</a></li>
+                                <li class="active"><a href="{% url 'blogs:list' %}">Blog</a></li>
+                                <li><a href="#">Contact</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div class="header-right">
+                        <div class="header-search">
+                            <a href="#" class="search-toggle" role="button" title="Search">
+                                <i class="icon-search"></i>
+                            </a>
+                            <form action="{% url 'blogs:list' %}" method="get">
+                                <div class="header-search-wrapper">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <input type="search" class="form-control" name="q" id="q"
+                                        placeholder="Search in..." value="{{ request.GET.q }}">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="dropdown cart-dropdown">
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <i class="icon-shopping-cart"></i>
+                                <span class="cart-count">0</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- End .header-middle -->
+        </header><!-- End Header -->
+
+        <main class="main">
+            <div class="page-header text-center"
+                style="background-image: url('{% static 'images/page-header-bg.jpg' %}')">
+                <div class="container">
+                    <h1 class="page-title">Blog<span>Blog</span></h1>
+                </div>
+            </div><!-- End .page-header -->
+
+            <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                <div class="container">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'shared:index' %}">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                    </ol>
+                </div>
+            </nav>
+
+            <div class="page-content">
+                <div class="container">
+                    <div class="row">
+
+                        <!-- Blog Posts -->
+                        <div class="col-lg-9">
+
+                            {% for blog in blogs %}
+                            <article class="entry">
+                                {% if blog.image %}
+                                <figure class="entry-media">
+                                    <a href="{% url 'blogs:detail' blog.pk %}">
+                                        <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                                    </a>
+                                </figure>
+                                {% endif %}
+
+                                <div class="entry-body">
+                                    <div class="entry-meta">
+                                        {% for author in blog.authors.all %}
+                                        <span class="entry-author">by <a href="#">{{ author.full_name }}</a></span>
+                                        {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                        <span class="meta-separator">|</span>
+                                        <a href="#">{{ blog.created_at|date:"M d, Y" }}</a>
+                                        <span class="meta-separator">|</span>
+                                        <span><i class="icon-eye"></i> {{ blog.view_count }}</span>
+                                    </div>
+
+                                    <h2 class="entry-title">
+                                        <a href="{% url 'blogs:detail' blog.pk %}">{{ blog.title }}</a>
+                                    </h2>
+
+                                    <div class="entry-cats">
+                                        in
+                                        {% for cat in blog.categories.all %}
+                                        <a href="?category={{ cat.pk }}">{{ cat.title }}</a>{% if not forloop.last %},{% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="entry-content">
+                                        <p>{{ blog.short_description }}</p>
+                                        <a href="{% url 'blogs:detail' blog.pk %}" class="read-more">Continue Reading</a>
+                                    </div>
+                                </div>
+                            </article>
+                            {% empty %}
+                            <div class="text-center py-5">
+                                <i class="icon-file" style="font-size: 48px; color: #ccc;"></i>
+                                <p class="mt-3">No blogs found.</p>
+                            </div>
+                            {% endfor %}
+
+                            <!-- Pagination -->
+                            {% if blogs.has_other_pages %}
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    {% if blogs.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link page-link-prev" href="?page={{ blogs.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">
+                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link page-link-prev" href="#">
+                                            <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+                                        </a>
+                                    </li>
+                                    {% endif %}
+
+                                    {% for num in blogs.paginator.page_range %}
+                                    <li class="page-item {% if blogs.number == num %}active{% endif %}">
+                                        <a class="page-link" href="?page={{ num }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">{{ num }}</a>
+                                    </li>
+                                    {% endfor %}
+
+                                    {% if blogs.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link page-link-next" href="?page={{ blogs.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.tag %}&tag={{ request.GET.tag }}{% endif %}">
+                                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item disabled">
+                                        <a class="page-link page-link-next" href="#">
+                                            Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+                                        </a>
+                                    </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            {% endif %}
+
+                        </div><!-- End .col-lg-9 -->
+
+                        <!-- Sidebar -->
+                        <aside class="col-lg-3">
+                            <div class="sidebar">
+
+                                <!-- Search Widget -->
+                                <div class="widget widget-search">
+                                    <h3 class="widget-title">Search</h3>
+                                    <form action="{% url 'blogs:list' %}" method="get">
+                                        <label for="ws" class="sr-only">Search in blog</label>
+                                        <input type="search" class="form-control" name="q" id="ws"
+                                            placeholder="Search in blog" value="{{ request.GET.q }}">
+                                        <button type="submit" class="btn"><i class="icon-search"></i></button>
+                                    </form>
+                                </div>
+
+                                <!-- Categories Widget -->
+                                <div class="widget widget-cats">
+                                    <h3 class="widget-title">Categories</h3>
+                                    <ul>
+                                        <li>
+                                            <a href="{% url 'blogs:list' %}{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}">
+                                                All <span>{{ blogs.paginator.count }}</span>
+                                            </a>
+                                        </li>
+                                        {% for category in categories %}
+                                        <li>
+                                            <a href="?category={{ category.pk }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+                                               class="{% if request.GET.category == category.pk|stringformat:'s' %}active{% endif %}">
+                                                {{ category.title }}
+                                                <span>{{ category.get_blog_count }}</span>
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <!-- Recent Posts Widget -->
+                                <div class="widget">
+                                    <h3 class="widget-title">Recent Posts</h3>
+                                    <ul class="posts-list">
+                                        {% for post in recent_posts %}
+                                        <li>
+                                            {% if post.image %}
+                                            <figure>
+                                                <a href="{% url 'blogs:detail' post.pk %}">
+                                                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                                                </a>
+                                            </figure>
+                                            {% endif %}
+                                            <div>
+                                                <span>{{ post.created_at|date:"M d, Y" }}</span>
+                                                <h4><a href="{% url 'blogs:detail' post.pk %}">{{ post.title }}</a></h4>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                                <!-- Tags Widget -->
+                                <div class="widget">
+                                    <h3 class="widget-title">Browse Tags</h3>
+                                    <div class="tagcloud">
+                                        {% for tag in tags %}
+                                        <a href="?tag={{ tag.pk }}"
+                                           class="{% if request.GET.tag == tag.pk|stringformat:'s' %}active{% endif %}">
+                                            {{ tag.title }}
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                <!-- About Widget -->
+                                <div class="widget widget-text">
+                                    <h3 class="widget-title">About Blog</h3>
+                                    <div class="widget-text-content">
+                                        <p>Vestibulum volutpat, lacus a ultrices sagittis, mi neque euismod dui, pulvinar nunc sapien ornare nisl.</p>
+                                    </div>
+                                </div>
+
+                            </div><!-- End .sidebar -->
+                        </aside><!-- End .col-lg-3 -->
+
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .page-content -->
+        </main><!-- End .main -->
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-middle">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget widget-about">
+                                <img src="{% static 'images/logo.png' %}" class="footer-logo" alt="Footer Logo"
+                                    width="105" height="25">
+                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
+                                    magna eros eu erat.</p>
+                                <div class="social-icons">
+                                    <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Useful Links</h4>
+                                <ul class="widget-list">
+                                    <li><a href="{% url 'shared:index' %}">Home</a></li>
+                                    <li><a href="#">About</a></li>
+                                    <li><a href="#">Contact us</a></li>
+                                    <li><a href="{% url 'users:login' %}">Log in</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Customer Service</h4>
+                                <ul class="widget-list">
+                                    <li><a href="#">Payment Methods</a></li>
+                                    <li><a href="#">Returns</a></li>
+                                    <li><a href="#">Shipping</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">My Account</h4>
+                                <ul class="widget-list">
+                                    <li><a href="{% url 'users:login' %}">Sign In</a></li>
+                                    <li><a href="#">View Cart</a></li>
+                                    <li><a href="#">My Wishlist</a></li>
+                                    <li><a href="#">Help</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container">
+                    <p class="footer-copyright">Copyright © 2024 Molla Store. All Rights Reserved.</p>
+                    <figure class="footer-payments">
+                        <img src="{% static 'images/payments.png' %}" alt="Payment methods" width="272" height="20">
+                    </figure>
+                </div>
+            </div>
+        </footer><!-- End Footer -->
+
+    </div><!-- End .page-wrapper -->
+
+    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu-container">
+        <div class="mobile-menu-wrapper">
+            <span class="mobile-menu-close"><i class="icon-close"></i></span>
+            <form action="{% url 'blogs:list' %}" method="get" class="mobile-search">
+                <label for="mobile-search" class="sr-only">Search</label>
+                <input type="search" class="form-control" name="q" id="mobile-search" placeholder="Search in..."
+                    value="{{ request.GET.q }}">
+                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+            </form>
+            <nav class="mobile-nav">
+                <ul class="mobile-menu">
+                    <li><a href="{% url 'shared:index' %}">Home</a></li>
+                    <li><a href="{% url 'shop:list' %}">Shop</a></li>
+                    <li><a href="{% url 'products:list' %}">Products</a></li>
+                    <li class="active"><a href="{% url 'blogs:list' %}">Blog</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="social-icons">
+                <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign in Modal -->
+    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="icon-close"></i></span>
+                    </button>
+                    <div class="form-box">
+                        <div class="form-tab">
+                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
+                                        role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register"
+                                        role="tab" aria-controls="register" aria-selected="false">Register</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
+                                    aria-labelledby="signin-tab">
+                                    <form action="{% url 'users:login' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="singin-email">Username or email address *</label>
+                                            <input type="text" class="form-control" id="singin-email" name="username"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="singin-password">Password *</label>
+                                            <input type="password" class="form-control" id="singin-password"
+                                                name="password" required>
+                                        </div>
+                                        <div class="form-footer">
+                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                <span>LOG IN</span>
+                                                <i class="icon-long-arrow-right"></i>
+                                            </button>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="signin-remember"
+                                                    name="remember">
+                                                <label class="custom-control-label" for="signin-remember">Remember
+                                                    Me</label>
+                                            </div>
+                                            <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="tab-pane fade" id="register" role="tabpanel"
+                                    aria-labelledby="register-tab">
+                                    <form action="{% url 'users:register' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group">
+                                            <label for="register-email">Your email address *</label>
+                                            <input type="email" class="form-control" id="register-email" name="email"
+                                                required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="register-password">Password *</label>
+                                            <input type="password" class="form-control" id="register-password"
+                                                name="password" required>
+                                        </div>
+                                        <div class="form-footer">
+                                            <button type="submit" class="btn btn-outline-primary-2">
+                                                <span>SIGN UP</span>
+                                                <i class="icon-long-arrow-right"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- End .modal -->
+
+    <!-- JS -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery.hoverIntent.min.js' %}"></script>
+    <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+    <script src="{% static 'js/superfish.min.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

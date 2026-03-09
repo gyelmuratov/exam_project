@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>About Us - Molla Store</title>
+    <title>Molla Store - Home</title>
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/icons/apple-touch-icon.png' %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/icons/favicon-32x32.png' %}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/icons/favicon-16x16.png' %}">
@@ -62,8 +62,8 @@
                     </a>
                     <nav class="main-nav">
                         <ul class="menu sf-arrows">
-                            <li><a href="{% url 'shared:index' %}">Home</a></li>
-                            <li class="active"><a href="{% url 'shared:about' %}">About</a></li>
+                            <li class="active"><a href="{% url 'shared:index' %}">Home</a></li>
+                            <li><a href="{% url 'shared:about' %}">About</a></li>
                             <li><a href="{% url 'shop:list' %}">Shop</a></li>
                             <li><a href="{% url 'products:list' %}">Products</a></li>
                             <li><a href="{% url 'blogs:list' %}">Blog</a></li>
@@ -93,227 +93,104 @@
     </header><!-- End Header -->
 
     <main class="main">
-        <!-- Page Header / Banner -->
+        <!-- Banner / About Section -->
         {% if banner %}
-        <div class="page-header text-center" style="background-image: url('{{ banner.image.url }}')">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
             <div class="container">
-                <h1 class="page-title">{{ banner.title }}<span>{{ banner.subtitle }}</span></h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shared:index' %}">Home</a></li>
+                </ol>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="page-header page-header-big text-center"
+                style="background-image: url('{{ banner.image.url }}')">
+                <h1 class="page-title text-white">{{ banner.title }}<span class="text-white">{{ banner.subtitle }}</span></h1>
             </div>
         </div>
         {% else %}
-        <div class="page-header text-center" style="background-image: url('{% static 'images/page-header-bg.jpg' %}')">
+        <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
             <div class="container">
-                <h1 class="page-title">About us<span>Pages</span></h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'shared:index' %}">Home</a></li>
+                </ol>
+            </div>
+        </nav>
+        <div class="container">
+            <div class="page-header page-header-big text-center"
+                style="background-image: url('{% static 'images/about-header-bg.jpg' %}')">
+                <h1 class="page-title text-white">About us<span class="text-white">Who we are</span></h1>
             </div>
         </div>
         {% endif %}
 
-        <nav aria-label="breadcrumb" class="breadcrumb-nav">
-            <div class="container">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'shared:index' %}">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">About Us</li>
-                </ol>
-            </div>
-        </nav>
-
-        <div class="page-content pb-3">
-            <!-- About Text -->
-            {% if about %}
+        <div class="page-content pb-0">
+            <!-- Sections -->
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-10 offset-lg-1">
-                        <div class="about-text text-center mt-3">
-                            <h2 class="title text-center mb-2">{{ about.title }}</h2>
-                            <p>{{ about.description }}</p>
-                            {% if about.signature %}
-                            <img src="{{ about.signature.url }}" alt="signature" class="mx-auto mb-5">
-                            {% endif %}
-                            {% if about.image %}
-                            <img src="{{ about.image.url }}" alt="image" class="mx-auto mb-6">
-                            {% endif %}
-                        </div>
+                    {% for section in sections %}
+                    <div class="col-lg-6 mb-3 mb-lg-0">
+                        <h2 class="title">{{ section.title }}</h2>
+                        <p>{{ section.description }}</p>
                     </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-10 offset-lg-1">
-                        <div class="about-text text-center mt-3">
-                            <h2 class="title text-center mb-2">Who We Are</h2>
-                            <p>Sed pretium, ligula sollicitudin laoreet viverra, tortor libero sodales leo, eget blandit nunc tortor eu nibh.</p>
-                        </div>
+                    {% empty %}
+                    <div class="col-lg-6 mb-3 mb-lg-0">
+                        <h2 class="title">Our Vision</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus hendrerit.</p>
                     </div>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Features -->
-            {% if features %}
-            <div class="container">
-                <div class="row justify-content-center">
-                    {% for feature in features %}
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="icon-box icon-box-sm text-center">
-                            <span class="icon-box-icon"><i class="{{ feature.icon|default:'icon-puzzle-piece' }}"></i></span>
-                            <div class="icon-box-content">
-                                <h3 class="icon-box-title">{{ feature.title }}</h3>
-                                <p>{{ feature.description }}</p>
-                            </div>
-                        </div>
+                    <div class="col-lg-6">
+                        <h2 class="title">Our Mission</h2>
+                        <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue.</p>
                     </div>
                     {% endfor %}
                 </div>
+                <div class="mb-5"></div>
             </div>
-            {% else %}
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="icon-box icon-box-sm text-center">
-                            <span class="icon-box-icon"><i class="icon-puzzle-piece"></i></span>
-                            <div class="icon-box-content">
-                                <h3 class="icon-box-title">Design Quality</h3>
-                                <p>Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae luctus metus libero eu augue.</p>
-                            </div>
+
+            <!-- Who We Are -->
+            {% if who_we_are %}
+            <div class="bg-light-2 pt-6 pb-5 mb-6 mb-lg-8">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-5 mb-3 mb-lg-0">
+                            <h2 class="title">{{ who_we_are.title }}</h2>
+                            <p class="lead text-primary mb-3">{{ who_we_are.subtitle }}</p>
+                            <p class="mb-2">{{ who_we_are.description }}</p>
+                            <a href="{% url 'blogs:list' %}" class="btn btn-sm btn-minwidth btn-outline-primary-2">
+                                <span>VIEW OUR NEWS</span>
+                                <i class="icon-long-arrow-right"></i>
+                            </a>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="icon-box icon-box-sm text-center">
-                            <span class="icon-box-icon"><i class="icon-life-ring"></i></span>
-                            <div class="icon-box-content">
-                                <h3 class="icon-box-title">Professional Support</h3>
-                                <p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="icon-box icon-box-sm text-center">
-                            <span class="icon-box-icon"><i class="icon-heart-o"></i></span>
-                            <div class="icon-box-content">
-                                <h3 class="icon-box-title">Made With Love</h3>
-                                <p>Pellentesque a diam sit amet mi ullamcorper vehicula. Nullam quis massa sit amet nibh viverra malesuada.</p>
+                        <div class="col-lg-6 offset-lg-1">
+                            <div class="about-images">
+                                {% if who_we_are.image_front %}
+                                <img src="{{ who_we_are.image_front.url }}" alt="" class="about-img-front">
+                                {% endif %}
+                                {% if who_we_are.image_back %}
+                                <img src="{{ who_we_are.image_back.url }}" alt="" class="about-img-back">
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             {% endif %}
-
-            <div class="mb-2"></div>
-
-            <!-- Statistics -->
-            {% if statistics %}
-            <div class="bg-image pt-7 pb-5 pt-md-12 pb-md-9" style="background-image: url('{% static 'images/backgrounds/bg-4.jpg' %}')">
-                <div class="container">
-                    <div class="row">
-                        {% for stat in statistics %}
-                        <div class="col-6 col-md-3">
-                            <div class="count-container text-center">
-                                <div class="count-wrapper text-white">
-                                    <span class="count" data-from="0" data-to="{{ stat.value }}" data-speed="3000" data-refresh-interval="50">0</span>{{ stat.suffix }}
-                                </div>
-                                <h3 class="count-title text-white">{{ stat.title }}</h3>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <div class="bg-image pt-7 pb-5 pt-md-12 pb-md-9" style="background-image: url('{% static 'images/backgrounds/bg-4.jpg' %}')">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-3">
-                            <div class="count-container text-center">
-                                <div class="count-wrapper text-white">
-                                    <span class="count" data-from="0" data-to="40" data-speed="3000" data-refresh-interval="50">0</span>k+
-                                </div>
-                                <h3 class="count-title text-white">Happy Customer</h3>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="count-container text-center">
-                                <div class="count-wrapper text-white">
-                                    <span class="count" data-from="0" data-to="20" data-speed="3000" data-refresh-interval="50">0</span>+
-                                </div>
-                                <h3 class="count-title text-white">Years in Business</h3>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="count-container text-center">
-                                <div class="count-wrapper text-white">
-                                    <span class="count" data-from="0" data-to="95" data-speed="3000" data-refresh-interval="50">0</span>%
-                                </div>
-                                <h3 class="count-title text-white">Return Clients</h3>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <div class="count-container text-center">
-                                <div class="count-wrapper text-white">
-                                    <span class="count" data-from="0" data-to="15" data-speed="3000" data-refresh-interval="50">0</span>
-                                </div>
-                                <h3 class="count-title text-white">Awards Won</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-
-            <!-- Team Members -->
-            <div class="bg-light-2 pt-6 pb-7 mb-6">
-                <div class="container">
-                    <h2 class="title text-center mb-4">Meet Our Team</h2>
-                    <div class="row">
-                        {% for member in team_members %}
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="member member-2 text-center">
-                                <figure class="member-media">
-                                    {% if member.image %}
-                                    <img src="{{ member.image.url }}" alt="{{ member.name }}">
-                                    {% endif %}
-                                    <figcaption class="member-overlay">
-                                        <div class="social-icons social-icons-simple">
-                                            {% if member.facebook %}<a href="{{ member.facebook }}" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>{% endif %}
-                                            {% if member.twitter %}<a href="{{ member.twitter }}" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>{% endif %}
-                                            {% if member.instagram %}<a href="{{ member.instagram }}" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>{% endif %}
-                                        </div>
-                                    </figcaption>
-                                </figure>
-                                <div class="member-content">
-                                    <h3 class="member-title">{{ member.name }}<span>{{ member.role }}</span></h3>
-                                </div>
-                            </div>
-                        </div>
-                        {% empty %}
-                        <div class="col-12 text-center"><p>No team members found.</p></div>
-                        {% endfor %}
-                    </div>
-                    <div class="text-center mt-3">
-                        <a href="{% url 'blogs:list' %}" class="btn btn-sm btn-minwidth-lg btn-outline-primary-2">
-                            <span>LETS START WORK</span>
-                            <i class="icon-long-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
 
             <!-- Brands -->
             {% if brands %}
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-10 offset-lg-1">
-                        {% if brand_section %}
-                        <div class="brands-text text-center mx-auto mb-6">
-                            <h2 class="title">{{ brand_section.title }}</h2>
-                            <p>{{ brand_section.description }}</p>
+                    <div class="col-lg-5">
+                        <div class="brands-text">
+                            <h2 class="title">The world's premium design brands in one destination.</h2>
+                            <p>Phasellus hendrerit. Pellentesque aliquet nibh nec urna.</p>
                         </div>
-                        {% endif %}
+                    </div>
+                    <div class="col-lg-7">
                         <div class="brands-display">
                             <div class="row justify-content-center">
                                 {% for brand in brands %}
-                                <div class="col-6 col-sm-4 col-md-3">
+                                <div class="col-6 col-sm-4">
                                     <a href="{{ brand.link|default:'#' }}" class="brand">
                                         <img src="{{ brand.image.url }}" alt="{{ brand.name }}">
                                     </a>
@@ -321,6 +198,134 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    </div>
+                </div>
+                <hr class="mt-4 mb-6">
+            </div>
+            {% endif %}
+
+            <!-- Team Members -->
+            {% if team_members %}
+            <div class="container">
+                <h2 class="title text-center mb-4">Meet Our Team</h2>
+                <div class="row">
+                    {% for member in team_members %}
+                    <div class="col-md-4">
+                        <div class="member member-anim text-center">
+                            <figure class="member-media">
+                                {% if member.image %}
+                                <img src="{{ member.image.url }}" alt="{{ member.name }}">
+                                {% endif %}
+                                <figcaption class="member-overlay">
+                                    <div class="member-overlay-content">
+                                        <h3 class="member-title">{{ member.name }}<span>{{ member.role }}</span></h3>
+                                        <div class="social-icons social-icons-simple">
+                                            {% if member.facebook %}<a href="{{ member.facebook }}" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>{% endif %}
+                                            {% if member.twitter %}<a href="{{ member.twitter }}" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>{% endif %}
+                                            {% if member.instagram %}<a href="{{ member.instagram }}" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>{% endif %}
+                                        </div>
+                                    </div>
+                                </figcaption>
+                            </figure>
+                            <div class="member-content">
+                                <h3 class="member-title">{{ member.name }}<span>{{ member.role }}</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Testimonials -->
+            {% if testimonials %}
+            <div class="about-testimonials bg-light-2 pt-6 pb-6 mt-6">
+                <div class="container">
+                    <h2 class="title text-center mb-3">What Customer Say About Us</h2>
+                    <div class="owl-carousel owl-simple owl-testimonials-photo" data-toggle="owl"
+                        data-owl-options='{"nav": false, "dots": true, "margin": 20, "loop": false, "responsive": {"1200": {"nav": true}}}'>
+                        {% for testimonial in testimonials %}
+                        <blockquote class="testimonial text-center">
+                            {% if testimonial.image %}
+                            <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
+                            {% endif %}
+                            <p>"{{ testimonial.comment }}"</p>
+                            <cite>{{ testimonial.name }}<span>{{ testimonial.role }}</span></cite>
+                        </blockquote>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Featured Products -->
+            {% if featured_products %}
+            <div class="container mt-6 mb-6">
+                <h2 class="title text-center mb-4">Featured Products</h2>
+                <div class="row">
+                    {% for product in featured_products %}
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="product">
+                            <figure class="product-media">
+                                <a href="{% url 'products:detail' product.pk %}">
+                                    {% with product.images.first as img %}
+                                    {% if img %}
+                                    <img src="{{ img.image.url }}" alt="{{ product.name }}" class="product-image">
+                                    {% endif %}
+                                    {% endwith %}
+                                </a>
+                            </figure>
+                            <div class="product-body">
+                                <h3 class="product-title"><a href="{% url 'products:detail' product.pk %}">{{ product.name }}</a></h3>
+                                <div class="product-price">${{ product.price }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Latest Blogs -->
+            {% if latest_blogs %}
+            <div class="bg-light-2 pt-6 pb-6">
+                <div class="container">
+                    <h2 class="title text-center mb-4">Latest News</h2>
+                    <div class="row">
+                        {% for blog in latest_blogs %}
+                        <div class="col-md-4">
+                            <article class="entry">
+                                {% if blog.image %}
+                                <figure class="entry-media">
+                                    <a href="{% url 'blogs:detail' blog.pk %}">
+                                        <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                                    </a>
+                                </figure>
+                                {% endif %}
+                                <div class="entry-body">
+                                    <div class="entry-meta">
+                                        {% for author in blog.authors.all %}
+                                        <span class="entry-author">by <a href="#">{{ author.full_name }}</a></span>
+                                        {% endfor %}
+                                        <span class="meta-separator">|</span>
+                                        <a href="#">{{ blog.created_at|date:"M d, Y" }}</a>
+                                    </div>
+                                    <h2 class="entry-title">
+                                        <a href="{% url 'blogs:detail' blog.pk %}">{{ blog.title }}</a>
+                                    </h2>
+                                    <div class="entry-content">
+                                        <p>{{ blog.short_description|truncatewords:15 }}</p>
+                                        <a href="{% url 'blogs:detail' blog.pk %}" class="read-more">Continue Reading</a>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="{% url 'blogs:list' %}" class="btn btn-outline-primary-2">
+                            <span>VIEW ALL NEWS</span><i class="icon-long-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -331,7 +336,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-middle">
+        <div class="footer-middle border-0">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-lg-3">
@@ -408,8 +413,8 @@
         </form>
         <nav class="mobile-nav">
             <ul class="mobile-menu">
-                <li><a href="{% url 'shared:index' %}">Home</a></li>
-                <li class="active"><a href="{% url 'shared:about' %}">About</a></li>
+                <li class="active"><a href="{% url 'shared:index' %}">Home</a></li>
+                <li><a href="{% url 'shared:about' %}">About</a></li>
                 <li><a href="{% url 'shop:list' %}">Shop</a></li>
                 <li><a href="{% url 'products:list' %}">Products</a></li>
                 <li><a href="{% url 'blogs:list' %}">Blog</a></li>
